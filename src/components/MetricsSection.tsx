@@ -19,9 +19,9 @@ function useCountUp(target: number, duration = 1200) {
 }
 
 export default function MetricsSection() {
-  const waitlist = useCountUp(847);
-  const approved = useCountUp(134);
-  const credit = useCountUp(52400, 1600);
+  const waitlist = useCountUp(18);
+  const approved = useCountUp(3);
+  const credit = useCountUp(1250, 1000);
 
   return (
     <section
