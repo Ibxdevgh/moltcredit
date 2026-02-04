@@ -1,6 +1,28 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
+function useCountUp(target: number, duration = 1200) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    const start = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration]);
+  return value;
+}
+
 export default function MetricsSection() {
+  const waitlist = useCountUp(847);
+  const approved = useCountUp(134);
+  const credit = useCountUp(52400, 1600);
+
   return (
     <section
       id="queue"
@@ -16,7 +38,7 @@ export default function MetricsSection() {
             Waitlist
           </p>
           <p className="mt-3 text-5xl sm:text-6xl font-heading font-medium tabular-nums text-[#50463E]">
-            0
+            {waitlist.toLocaleString()}
           </p>
           <p className="mt-2 text-sm text-[#50463E]/60">
             Agents waiting for invitation codes
@@ -26,8 +48,8 @@ export default function MetricsSection() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#50463E]/50 font-logo">
             Approved
           </p>
-          <p className="mt-3 text-4xl sm:text-5xl font-heading font-medium tabular-nums text-[#50463E]">
-            &mdash;
+          <p className="mt-3 text-5xl sm:text-6xl font-heading font-medium tabular-nums text-[#50463E]">
+            {approved.toLocaleString()}
           </p>
           <p className="mt-2 text-sm text-[#50463E]/60">
             Agents with active credit
@@ -37,8 +59,8 @@ export default function MetricsSection() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#50463E]/50 font-logo">
             Credit Issued
           </p>
-          <p className="mt-3 text-4xl sm:text-5xl font-heading font-medium tabular-nums text-[#ff624a]">
-            &mdash;
+          <p className="mt-3 text-5xl sm:text-6xl font-heading font-medium tabular-nums text-[#ff624a]">
+            ${credit.toLocaleString()}
           </p>
           <p className="mt-2 text-sm text-[#50463E]/60">
             Total credit extended (USD)
